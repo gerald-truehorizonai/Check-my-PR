@@ -1,0 +1,13 @@
+{
+  "name": "check-my-pr-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Buildless Chrome extension frontend for Jev-powered pull request assessments",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node scripts/check.mjs",
+    "package": "node scripts/package.mjs"
+  }
+}
