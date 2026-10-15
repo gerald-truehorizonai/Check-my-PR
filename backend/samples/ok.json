@@ -1,0 +1,4 @@
+{
+  "title": "Fix login redirect loop",
+  "body": "## Summary\nUsers were stuck in a redirect loop after login. This fixes it.\n\n## Changes\n- Updated auth middleware\n- Some cleanup\n\n## Testing\nTested locally, works now."
+}

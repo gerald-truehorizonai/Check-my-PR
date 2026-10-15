@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Check my PR (dev)",
+  "version": "0.0.1",
+  "description": "Scores GitHub PR descriptions against a rubric with Jev.",
+  "host_permissions": ["https://github.com/*", "http://localhost:8787/*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
