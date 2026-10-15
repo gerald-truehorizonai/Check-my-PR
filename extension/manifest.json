@@ -1,15 +1,37 @@
 {
   "manifest_version": 3,
-  "name": "Check my PR (dev)",
-  "version": "0.0.1",
-  "description": "Scores GitHub PR descriptions against a rubric with Jev.",
-  "host_permissions": ["https://github.com/*", "http://localhost:8787/*"],
-  "background": { "service_worker": "background.js" },
+  "name": "Check My PR",
+  "description": "Assess pull requests against your team's standard, powered by Jev.",
+  "version": "0.1.0",
+  "minimum_chrome_version": "116",
+  "permissions": ["storage", "activeTab", "sidePanel"],
+  "host_permissions": ["https://github.com/*", "https://api.github.com/*"],
+  "optional_host_permissions": ["https://*/*", "http://localhost/*", "http://127.0.0.1/*", "http://[::1]/*"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "icons": {
+    "16": "assets/icon16.png",
+    "32": "assets/icon32.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  },
+  "action": {
+    "default_title": "Check My PR",
+    "default_icon": {
+      "16": "assets/icon16.png",
+      "32": "assets/icon32.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  },
+  "side_panel": { "default_path": "sidepanel.html" },
   "content_scripts": [
     {
       "matches": ["https://github.com/*"],
       "js": ["content.js"],
       "run_at": "document_idle"
     }
-  ]
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }

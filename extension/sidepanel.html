@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Check my PR — A second look before you merge</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="sidepanel.html" aria-label="Check my PR home"><span class="brand-mark" data-icon="branch"></span><span>check my<span class="brand-pr"> PR</span><span class="brand-dot">.</span></span></a>
+      <div class="sidebar-label">YOUR REVIEW WORKSPACE</div>
+      <nav class="navigation" aria-label="Main navigation">
+        <button class="nav-item active" data-view="review" aria-current="page"><span data-icon="scan"></span><span>PR review</span><span class="nav-key">01</span></button>
+        <button class="nav-item" data-view="standards"><span data-icon="sliders"></span><span>Your standards</span><span class="nav-key">02</span></button>
+        <button class="nav-item" data-view="settings"><span data-icon="settings"></span><span>Connection</span><span class="connection-dot" id="nav-connection"></span></button>
+      </nav>
+      <div class="sidebar-bottom"><div class="tiny-branch" data-icon="branch"></div><p>Good changes.<br>Better confidence.</p><span class="sidebar-credit">Built with Jev</span></div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar"><span class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumb-view">PR review</strong></span><div class="topbar-right"><span class="jev-badge"><i></i> Powered by Jev</span><button class="icon-button" id="expand-button" title="Open in a full tab" aria-label="Open in a full tab"><span data-icon="expand"></span></button></div></header>
+      <main>
+        <section id="view-review" class="view" aria-labelledby="review-title">
+          <div class="page-heading"><div><div class="eyebrow">A SECOND LOOK BEFORE YOU MERGE</div><h1 id="review-title">Ship with confidence<span>.</span></h1><p>A clearer PR description. A faster human review.</p></div><button class="text-button demo-trigger" id="demo-button"><span data-icon="play"></span> Try a sample review</button></div>
+
+          <form id="review-form" class="pr-input-card">
+            <div class="input-card-label"><label for="pr-url"><span data-icon="github"></span> Pull request</label><button type="button" class="text-button small" id="use-current-button"><span data-icon="link"></span> Use current tab</button></div>
+            <div class="pr-input-row"><input id="pr-url" type="url" placeholder="https://github.com/owner/repo/pull/123" autocomplete="off" spellcheck="false" aria-describedby="pr-help" required><button class="primary-button" id="analyze-button" type="submit"><span data-icon="scan"></span><span>Check my PR</span><span data-icon="arrow"></span></button></div>
+            <div class="input-card-footer"><span id="pr-help">Open a GitHub pull request or paste its link.</span><button type="button" class="text-button small" data-view="standards"><span data-icon="sliders"></span><span id="standards-label">Team standards</span></button></div>
+            <details class="pr-context-editor" id="pr-context-editor"><summary><span data-icon="file"></span> PR content <span id="context-status">Fetched when you review</span><span data-icon="chevron"></span></summary><div><label for="pr-title-input">PR title</label><input id="pr-title-input" type="text" maxlength="500" placeholder="e.g. Add workspace invitations"><label for="pr-body-input">PR description</label><textarea id="pr-body-input" maxlength="20000" placeholder="Captured from GitHub, or paste the PR description here. You can edit and recheck it before updating the PR."></textarea><p>Jev scores this title and description. Code diffs and repository secrets are not scanned.</p></div></details>
+          </form>
+
+          <div id="error-banner" class="notice error-notice" role="alert" hidden></div>
+          <div id="context-notice" class="notice context-notice" hidden></div>
+          <div id="loading-panel" class="loading-panel" aria-live="polite" hidden><div class="scan-orbit"><span data-icon="scan"></span></div><div><h2>Taking a closer look</h2><p>Reading the PR against your standards. Jev is evaluating the evidence.</p><span class="loading-time" id="loading-time">0s elapsed</span></div><button class="secondary-button compact" id="cancel-button">Cancel</button><div class="loading-track"><div></div></div></div>
+
+          <div id="empty-state" class="empty-state">
+            <div class="empty-intro"><span class="empty-symbol" data-icon="branch"></span><div><h2>Five checks. One clearer decision.</h2><p>A useful review goes beyond a green build.</p></div></div>
+            <div class="coverage-grid">
+              <div class="coverage-card"><span data-icon="file"></span><strong>Purpose & scope</strong><p>What changed, why it matters, and what's in scope.</p><span class="coverage-number">01</span></div>
+              <div class="coverage-card"><span data-icon="book"></span><strong>Documentation</strong><p>Setup and behavior changes explained where needed.</p><span class="coverage-number">02</span></div>
+              <div class="coverage-card"><span data-icon="check-square"></span><strong>Test evidence</strong><p>Meaningful checks for the behavior being changed.</p><span class="coverage-number">03</span></div>
+              <div class="coverage-card"><span data-icon="shield"></span><strong>Change risk</strong><p>Sensitive areas, breaking changes, and rollback plans.</p><span class="coverage-number">04</span></div>
+              <div class="coverage-card"><span data-icon="key"></span><strong>Security notes</strong><p>What credential checks the author reports. Code scanning comes next.</p><span class="coverage-number">05</span></div>
+            </div>
+            <div class="empty-footer"><span data-icon="eye"></span><p>Your standards set the bar.<br><strong>You make the final call.</strong></p><button class="secondary-button" id="empty-demo-button">See it in action <span data-icon="arrow"></span></button></div>
+          </div>
+
+          <section id="review-results" aria-label="Review results" hidden>
+            <div class="sample-banner" id="sample-banner" hidden><span data-icon="flask"></span><span><strong>Sample review</strong> · Illustrative results. No API call was made.</span><button class="text-button small" id="toggle-sample-button">Show after fixes <span data-icon="arrow"></span></button></div>
+            <div class="result-heading"><div><div class="repo-line" id="repo-line"></div><h2 id="pr-title"></h2><div class="pr-meta" id="pr-meta"></div></div><a class="icon-button" id="github-link" target="_blank" rel="noopener noreferrer" aria-label="Open pull request on GitHub" title="Open on GitHub"><span data-icon="external"></span></a></div>
+            <div class="assessment-grid"><div class="verdict-card" id="verdict-card"><div class="verdict-overline"><span class="status-pill" id="verdict-pill"></span><span class="review-complete"><span data-icon="check"></span> Review complete</span></div><h2 id="verdict-title"></h2><p id="review-summary"></p><div class="verdict-bottom"><span id="risk-pill" class="risk-pill"></span><span id="coverage-label"></span></div></div><div class="score-card"><div class="score-heading"><span id="score-label">Review score</span><span class="info-dot" title="A rubric score, not the probability that this PR is correct.">i</span></div><div class="score-display"><strong id="review-score">—</strong><span>/ 100</span></div><div class="score-meter"><div id="score-meter-fill"></div></div><p id="score-caption"></p></div></div>
+            <div class="summary-stats" id="summary-stats"></div>
+            <div class="checks-heading"><div><h2>The review, unpacked</h2><p id="checks-caption">Evidence and next steps for every check.</p></div><button class="secondary-button compact" id="copy-button"><span data-icon="copy"></span> Copy summary</button></div>
+            <div class="filter-row" role="group" aria-label="Filter review checks"><button class="filter active" data-filter="all" aria-pressed="true">All checks <span id="all-count">5</span></button><button class="filter" data-filter="attention" aria-pressed="false">Needs attention <span id="attention-count">0</span></button><button class="filter" data-filter="passed" aria-pressed="false">Passed <span id="passed-count">0</span></button></div>
+            <div id="checks-list" class="checks-list"></div><div id="no-checks" class="no-checks" hidden>No checks in this view.</div>
+            <section class="human-review" aria-labelledby="human-review-title"><div class="human-review-heading"><div><span class="eyebrow">YOUR JUDGMENT MATTERS TOO</span><h2 id="human-review-title">Anything else to flag?</h2></div><span data-icon="eye"></span></div><form id="concern-form"><label class="sr-only" for="reviewer-concern">Your concern about this PR</label><textarea id="reviewer-concern" rows="2" maxlength="2000" placeholder="e.g. This changes the invite flow, but doesn't handle expired links."></textarea><div class="concern-footer"><span>Your notes stay in this review.</span><button type="submit" class="secondary-button compact">Add concern <span data-icon="plus"></span></button></div></form><div id="concerns-list"></div></section>
+            <div class="repair-bar"><span class="repair-symbol" data-icon="sparkles"></span><div><h3>Turn findings into fixes.</h3><p>Take Jev’s findings and your notes to your own ChatGPT account.</p></div><button class="primary-button" id="repair-all-button"><span data-icon="sparkles"></span> Fix with ChatGPT <span data-icon="arrow"></span></button></div>
+            <div class="review-footnote"><span data-icon="info"></span><p>Jev assesses the available evidence. A pass is not a guarantee of correctness or security.</p><span id="review-metrics"></span></div>
+          </section>
+        </section>
+
+        <section id="view-standards" class="view" aria-labelledby="standards-title" hidden><div class="page-heading"><div><div class="eyebrow">DEFINE WHAT GOOD LOOKS LIKE</div><h1 id="standards-title">Your standards<span>.</span></h1><p>Give every review the same clear expectations.</p></div><span class="tag">Editable benchmark</span></div><div class="standards-layout"><div class="editor-card"><div class="editor-toolbar"><label for="guidelines">PR review guidelines</label><span id="guidelines-count"></span></div><textarea id="guidelines" spellcheck="false" aria-describedby="guidelines-help"></textarea><div class="editor-footer"><span id="guidelines-help">Saved locally. Sent with each review.</span><div><button class="text-button" id="reset-standards">Restore defaults</button><button class="primary-button" id="save-standards"><span data-icon="check"></span> Save standards</button></div></div></div><aside class="standards-aside"><span class="aside-symbol" data-icon="sliders"></span><h2>Your team.<br>Your definition of ready.</h2><p>Describe the evidence you expect, when a check applies, and what should block a merge.</p><div class="tip"><strong>Be specific</strong><p>“Document new environment variables” is more useful than “have good documentation.”</p></div><div class="tip"><strong>Leave room for unknown</strong><p>Missing evidence should ask for a closer look, rather than become a pass.</p></div><div class="tip"><strong>Keep critical checks separate</strong><p>A potential leaked secret needs attention even when everything else looks good.</p></div></aside></div></section>
+
+        <section id="view-settings" class="view" aria-labelledby="settings-title" hidden><div class="page-heading"><div><div class="eyebrow">CONNECT YOUR REVIEW ENGINE</div><h1 id="settings-title">Ready when you are<span>.</span></h1><p>Point the extension to your team's Jev backend.</p></div></div><form id="settings-form" class="settings-card"><div class="settings-card-title"><span data-icon="server"></span><div><h2>Review backend</h2><p>The endpoint that receives the PR and your standards.</p></div></div><label class="field-label" for="backend-endpoint">Review endpoint</label><input type="url" id="backend-endpoint" placeholder="http://localhost:8787/check" required spellcheck="false" aria-describedby="endpoint-help"><p class="field-help" id="endpoint-help">Use HTTPS for a hosted backend, or localhost for development.</p><div class="connection-explainer"><span data-icon="key"></span><p>Your Jev API key stays on the backend. This extension sends the PR title, description, and review rubric to the endpoint above.</p></div><div class="settings-actions"><span id="settings-status" role="status"></span><button class="primary-button" type="submit"><span data-icon="check"></span> Save connection</button></div></form><div class="setup-note"><span data-icon="info"></span><p>Backend still in progress? Use <button class="inline-button" id="settings-demo-button">a sample review</button> to explore the interface. Live reviews always use your configured backend.</p></div></section>
+      </main>
+      <footer class="app-footer"><span><span class="footer-mark">✓</span> A little more clarity before every merge.</span><span>CHECK MY PR <b> / </b> v0.1</span></footer>
+    </div>
+  </div>
+  <dialog id="repair-dialog" aria-labelledby="repair-title"><div class="dialog-heading"><span class="dialog-mark" data-icon="sparkles"></span><button class="icon-button" id="close-repair" aria-label="Close repair prompt"><span data-icon="close"></span></button></div><div class="eyebrow">YOUR ACCOUNT. YOUR REPAIR WORKFLOW.</div><h2 id="repair-title">Continue with ChatGPT.</h2><p class="dialog-description">Copy this repair prompt into your own ChatGPT chat, then attach the relevant code. Nothing is sent automatically.</p><label class="sr-only" for="repair-prompt">Repair prompt to copy</label><textarea id="repair-prompt" readonly spellcheck="false"></textarea><div class="dialog-actions"><button class="primary-button" id="copy-repair"><span data-icon="copy"></span> 1. Copy repair prompt</button><a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" class="secondary-button" id="open-chatgpt">2. Open ChatGPT <span data-icon="external"></span></a></div><p class="dialog-footnote" id="repair-status" role="status">Review the prompt before sharing. After applying a fix, run Check my PR again.</p></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

@@ -1,14 +1,19 @@
-// Relays calls to the local backend. Going through the service worker avoids the page's
-// CORS and Chrome's block on public sites talking to localhost.
-const BACKEND = "http://localhost:8787";
+import { parsePullRequestUrl } from './lib/browser.js';
 
-chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
-  fetch(`${BACKEND}${msg.path}`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(msg.payload),
-  })
-    .then(async (r) => reply({ ok: r.ok, data: await r.json() }))
-    .catch((err) => reply({ ok: false, data: { error: `Backend unreachable: ${err.message}` } }));
-  return true; // keep the channel open for the async reply
+// Opening from the toolbar preserves the page and leaves room for the review.
+chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(console.error);
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message?.type !== 'CHECK_MY_PR_OPEN_PANEL') return;
+  if (sender.id !== chrome.runtime.id || !Number.isInteger(sender.tab?.id) || !parsePullRequestUrl(sender.url)) {
+    sendResponse({ opened: false });
+    return;
+  }
+
+  // Call immediately: Chrome requires the content-script click's user gesture.
+  chrome.sidePanel.open({ tabId: sender.tab.id }).then(
+    () => sendResponse({ opened: true }),
+    () => sendResponse({ opened: false }),
+  );
+  return true;
 });
